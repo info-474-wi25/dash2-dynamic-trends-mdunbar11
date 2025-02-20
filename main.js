@@ -22,8 +22,29 @@ const svg2_RENAME = d3.select("#lineChart2")
 // const tooltip = ...
 
 // 2.a: LOAD...
-d3.csv("YOUR_CSV_NAME.csv").then(data => {
+d3.csv("aircraft_incidents.csv").then(data => {
     // 2.b: ... AND TRANSFORM DATA
+    data.forEach(d => {
+        d.year = d.Event_Date.slice(-2); // Grab year digits
+        d.year = d.year < 90 ? `20${d.year}` : `19${d.year}`;
+        d.year = +d.year
+        d.accident_id = d.Accident_Number;
+        d.flight_phase = d.Broad_Phase_of_Flight;
+    });
+
+   // console.log(data);
+
+    const categories = d3.rollup(data,
+        v => d3.rollup(v,
+            values => values.length, // Aggregation: count incidents in each year
+            d => d.year // Group by year
+        ),
+        
+        d => d.flight_phase // Group by flight phase
+    );
+
+    // console.log(categories); 
+
 
     // 3.a: SET SCALES FOR CHART 1
 
