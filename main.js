@@ -126,6 +126,56 @@ d3.csv("aircraft_incidents.csv").then(data => {
         .style("font-size", "10px")
         .text(d => d[0]);
 
+    // Tooltip
+    const tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+    .style("background", "rgba(0, 0, 0, 0.7)")
+    .style("color", "white")
+    .style("padding", "6px")
+    .style("border-radius", "5px")
+    .style("font-size", "12px");
+
+    // Bind data points to each category's line
+    const points = svgLine.selectAll(".data-points")
+    .data(lineData)
+    .enter()
+    .append("g")
+    .attr("class", "data-points")
+    .each(function (d) {
+        d3.select(this)
+            .selectAll("circle")
+            .data(d.values)
+            .enter()
+            .append("circle")
+            .attr("cx", d => xScale(d.year))
+            .attr("cy", d => yScale(d.count))
+            .attr("r", 5)
+            .style("fill", colorScale(d.category))
+            .style("opacity", 0) // Invisible by default
+            .on("mouseover", function (event, d) {
+                tooltip.style("visibility", "visible")
+                    .html(
+                        `<strong>Year:</strong> ${d.year} <br>
+                        <strong>Accidents:</strong> ${d.count}`
+                    )
+                    .style("top", (event.pageY + 10) + "px")
+                    .style("left", (event.pageX + 10) + "px");
+
+                d3.select(this).transition().duration(200).style("opacity", 1);
+            })
+            .on("mousemove", function (event) {
+                tooltip.style("top", (event.pageY + 10) + "px")
+                    .style("left", (event.pageX + 10) + "px");
+            })
+            .on("mouseout", function () {
+                tooltip.style("visibility", "hidden");
+                d3.select(this).transition().duration(200).style("opacity", 0);
+            });
+        });
+
     // Update Chart Function
     function updateChart(selectedCategories) {
         // Filter the data for selected categories
@@ -139,6 +189,9 @@ d3.csv("aircraft_incidents.csv").then(data => {
     
         // Remove lines that are no longer selected
         lines.exit().remove();
+
+        // Remove existing marks
+        svgLine.selectAll(".data-point").remove(); // Remove previous tooltip circles
     
         // Update existing lines
         lines
@@ -153,6 +206,57 @@ d3.csv("aircraft_incidents.csv").then(data => {
             .style("stroke", d => colorScale(d.category))
             .style("fill", "none")
             .style("stroke-width", 2);
+
+        // Recreate tooltip marks
+        // Tooltip
+        const tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("visibility", "hidden")
+        .style("background", "rgba(0, 0, 0, 0.7)")
+        .style("color", "white")
+        .style("padding", "6px")
+        .style("border-radius", "5px")
+        .style("font-size", "12px");
+
+        // Bind data points to each category's line
+        const points = svgLine.selectAll(".data-points")
+        .data(selectedCategories)
+        .enter()
+        .append("g")
+        .attr("class", "data-points")
+        .each(function (d) {
+            d3.select(this)
+                .selectAll("circle")
+                .data(d.values)
+                .enter()
+                .append("circle")
+                .attr("cx", d => xScale(d.year))
+                .attr("cy", d => yScale(d.count))
+                .attr("r", 5)
+                .style("fill", colorScale(d.category))
+                .style("opacity", 0) // Invisible by default
+                .on("mouseover", function (event, d) {
+                    tooltip.style("visibility", "visible")
+                        .html(
+                            `<strong>Year:</strong> ${d.year} <br>
+                            <strong>Accidents:</strong> ${d.count}`
+                        )
+                        .style("top", (event.pageY + 10) + "px")
+                        .style("left", (event.pageX + 10) + "px");
+
+                    d3.select(this).transition().duration(200).style("opacity", 1);
+                })
+                .on("mousemove", function (event) {
+                    tooltip.style("top", (event.pageY + 10) + "px")
+                        .style("left", (event.pageX + 10) + "px");
+                })
+                .on("mouseout", function () {
+                    tooltip.style("visibility", "hidden");
+                    d3.select(this).transition().duration(200).style("opacity", 0);
+                });
+        });
     }
 
     // Checkbox Event Listener
