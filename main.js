@@ -181,7 +181,7 @@ d3.csv("aircraft_incidents.csv").then(data => {
         // Filter the data for selected categories
         var filteredData = lineData.filter(d => selectedCategories.includes(d.category));
     
-        console.log("Filtered Data:", filteredData); // Debugging
+        // console.log("Filtered Data:", filteredData); // Debugging
     
         // Bind data to existing lines
         var lines = svgLine.selectAll("path.data-line")
