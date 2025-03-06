@@ -17,15 +17,22 @@
     
     <!-- INTERACTIVE WIDGETS -->
     <div class="item horizontal-container">
-        <div class="item"><!-- Your widget 1 code goes here. -->
+        <div class="item" id="checkboxSelect"><!-- Your widget 1 code goes here. -->
             <!-- Widget 1 title -->
+            <label for="checkboxSelect">Select Broad Phase of Flight</label>
             <!-- Widget 1 element -->
-        </div>
-
-        <!-- DELETE THE FOLLOWING DIV IF YOU ONLY HAVE 1 WIDGET. -->
-        <div class="item"><!-- Your widget 2 code goes here. -->
-            <!-- Widget 2 title -->
-            <!-- Widget 2 element -->
+            <div class="checkbox-container">
+                <div id="categoryCheckboxes">
+                    <label><input type="checkbox" value="CRUISE"> Cruise</label>
+                    <label><input type="checkbox" value="LANDING"> Landing</label>
+                    <label><input type="checkbox" value="STANDING"> Standing</label>
+                    <label><input type="checkbox" value="APPROACH"> Approach</label>
+                    <label><input type="checkbox" value="TAKEOFF"> Takeoff</label>
+                    <label><input type="checkbox" value="CLIMB"> Climb</label>
+                    <label><input type="checkbox" value="TAXI"> Taxi</label>
+                    <label><input type="checkbox" value="DESCENT"> Descent</label>
+                </div>
+            </div>
         </div>
     </div>
 
